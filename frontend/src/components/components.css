@@ -1,0 +1,79 @@
+
+/* Navbar */
+.mainNavbar {
+    background-color: #6e54b5;
+    font-size: 20px;
+    padding: 5px;
+    color: #f1f1f1;
+}
+
+.btnHome {
+    color: #f1f1f1 !important;
+    margin-left: 10px;
+}
+
+.btnLogin {
+    float: right;
+    color: #f1f1f1;
+}
+
+
+.backgroundContainer {
+    background-color: #2b2738;
+    height: 100vh;
+
+}
+
+
+/* Buttons */
+
+.main-btn {
+    background-color: #6e54b5 !important;
+    color: #f1f1f1;
+}
+
+
+.mainContainer {
+    color: aliceblue;
+    display: flex;
+    height: 90vh;
+    justify-content: center;
+    align-items: center;
+    font-family: 'Arvo';
+}
+
+.loginContainer{
+    background-color: #f1f1f1;
+    margin-top: 60px;
+    height: 70vh;
+    border-radius: 5px 5px 5px 5px;
+}
+
+.loginServices{
+    display: flex;
+    justify-content: center;
+    margin-top: 30px;
+
+}
+.btnServiceRound{
+    border: none;
+    background-color: #2b2738 !important;
+    margin-right: 20px;
+
+}
+
+/*.formLogin{
+    display: flex;
+    flex-wrap: nowrap;
+    flex-direction: column;
+    height: 165%;
+}*/
+
+.labelLogin {
+    text-align: left;
+}
+
+.linkColor {
+    text-decoration: none;
+    color: #6e54b5
+}
