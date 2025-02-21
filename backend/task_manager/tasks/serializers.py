@@ -43,6 +43,13 @@ class GetTasksSerializer(serializers.ModelSerializer):
             'tag_name'
         ]
 
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
+
+        # Si en el contexto se indica que se deben mostrar todas las tareas, agregar "state"
+        if self.context.get('include_state', False):
+            self.fields['state'] = serializers.BooleanField()
+
     def get_tag_name(self, obj):
         return obj.tag.name if obj.tag else None
 

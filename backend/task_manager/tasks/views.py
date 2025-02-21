@@ -76,8 +76,19 @@ class ListTasksActive(generics.ListAPIView):
         # Obtener el usuario autenticado
         user = self.request.user
 
-        # Obtener las tareas del usuario
-        return Tasks.objects.filter(user=user, state=True)
+        # Obtener el parámetro "all" de la URL
+        show_all = self.request.query_params.get('all', 'false').lower()
+
+        # Obtener todas las tareas o solo las activas
+        if show_all == 'true':
+            return Tasks.objects.filter(user=user)
+        else:
+            return Tasks.objects.filter(user=user, state=True)
+
+    def get_serializer_context(self):
+        # Pasar el contexto para indicar si se debe incluir el campo state
+        show_all = self.request.query_params.get('all', 'false').lower() == 'true'
+        return {'include_state': show_all}
 
 class UpdateTask(GenericAPIView):
     permission_classes = (permissions.IsAuthenticated,)
@@ -94,6 +105,7 @@ class UpdateTask(GenericAPIView):
         task_description = request.data.get('task_description', task.description)
         progress = request.data.get('progress', task.progress)
         priority = request.data.get('priority', task.priority)
+        state = request.data.get('state', task.state)
         start_date = request.data.get('start_date', task.start_date)
         end_date = request.data.get('end_date', task.end_date)
         tag_name = request.data.get('tag_name', None)  # Opcional
@@ -108,10 +120,11 @@ class UpdateTask(GenericAPIView):
         task.description = task_description
         task.progress = progress
         task.priority = priority
+        task.state = state
         task.start_date = start_date
         task.end_date = end_date
         task.tag = tag
-        task.modified_at = timezone.now()
+        task.modified_at = timezone.now() # Actualizar la fecha de modificación
 
         # Guardar los cambios
         task.save()
