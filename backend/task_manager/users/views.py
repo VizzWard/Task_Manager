@@ -34,4 +34,22 @@ class LogoutAPIView(generics.GenericAPIView):
 
 class UserSettingsView(views.APIView):
     permission_classes = (permissions.IsAuthenticated,)
+
     def get(self,request):
+        user = request.user
+        return Response({
+            'notification': user.usersettings.notification,
+            'night_mode': user.usersettings.night_mode
+        })
+
+    def patch(self,request):
+        user = request.user
+        user.usersettings.notification = request.data['notification']
+        user.usersettings.night_mode = request.data['night_mode']
+        user.usersettings.save()
+        return Response({
+            'success': True,
+            'id': user.id,
+            'notification': user.usersettings.notification,
+            'night_mode': user.usersettings.night_mode
+        })
