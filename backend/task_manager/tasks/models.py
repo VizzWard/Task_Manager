@@ -27,7 +27,7 @@ class Tasks(models.Model):
 
     tag = models.ForeignKey(TagsUser, on_delete=models.CASCADE, null=True, blank=True)
     state = models.BooleanField(default=True) # True = Active, False = Inactive
-    creates_at = models.DateTimeField(auto_now_add=True)
+    created_at = models.DateTimeField(auto_now_add=True)
     modified_at = models.DateTimeField(blank=True, null=True)
 
     def __str__(self):
