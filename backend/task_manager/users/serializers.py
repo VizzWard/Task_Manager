@@ -32,23 +32,21 @@ class RegisterSerializer(serializers.ModelSerializer):
         return user
 
 class LoginSerializer(serializers.Serializer):
-    email = serializers.EmailField()
+    email = serializers.EmailField(write_only=True)  # Solo para entrada
     password = serializers.CharField(max_length=25, min_length=6, write_only=True)
     tokens = serializers.SerializerMethodField()
 
     def get_tokens(self, obj):
-        user = User.objects.get(email=obj['email'])
-        return user.tokens()
+        return obj.tokens()  # `obj` ya es el usuario
 
     class Meta:
         model = User
-        fields = ['email', 'password', 'tokens']
+        fields = ['tokens']  # Solo devolver tokens
 
     def validate(self, attrs):
         email = attrs.get('email')
         password = attrs.get('password')
 
-        # Buscar usuario por email
         user = User.objects.filter(email=email).first()
 
         if user is None or not user.check_password(password):
@@ -57,10 +55,7 @@ class LoginSerializer(serializers.Serializer):
         if not user.is_active:
             raise AuthenticationFailed('Account disabled, contact admin')
 
-        return {
-            'email': user.email,
-            'tokens': user.tokens()
-        }
+        return user  # Retornamos el usuario directamente
 
 class LogoutSerializer(serializers.Serializer):
     refresh = serializers.CharField()
