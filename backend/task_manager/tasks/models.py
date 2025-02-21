@@ -34,8 +34,8 @@ class Tasks(models.Model):
         return f'{self.name} | {self.state} | {self.end_date} | {self.user_id}'
 
 class Comments(models.Model):
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    task_id = models.ForeignKey(Tasks, on_delete=models.CASCADE)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    task = models.ForeignKey(Tasks, on_delete=models.CASCADE)
     comment = models.TextField()
     created_at = models.DateTimeField(auto_now_add=True)
 

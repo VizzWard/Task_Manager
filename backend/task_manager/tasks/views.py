@@ -144,5 +144,59 @@ class UpdateTask(GenericAPIView):
 
         return Response({"message": "Tarea eliminada correctamente."}, status=status.HTTP_204_NO_CONTENT)
 
+class AddCommentView(GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CommentsSerializer
 
+    def post(self, request, id=None):
+        user = request.user
 
+        # 🔍 Buscar la tarea y validar que le pertenece al usuario
+        task = get_object_or_404(Tasks, id=id, user=user)
+
+        # 📝 Crear el comentario
+        comment = request.data.get('comment')
+        new_comment = Comments.objects.create(user=user, task=task, comment=comment)
+
+        # Serializar y devolver la respuesta
+        serializer = CommentsSerializer(new_comment)
+        return Response(serializer.data, status=status.HTTP_201_CREATED)
+
+class ViewCommentsTask(generics.ListAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CommentsSerializer
+
+    def get_queryset(self):
+        user = self.request.user
+        id = self.kwargs['id']
+
+        return Comments.objects.filter(task=id, user=user)
+
+class UpdateCommentView(GenericAPIView):
+    permission_classes = (permissions.IsAuthenticated,)
+    serializer_class = CommentsSerializer
+
+    def patch (self, request, task=None, id=None):
+        user = request.user
+
+        # 🔍 Buscar el comentario y validar que le pertenece al usuario
+        comment = get_object_or_404(Comments, id=id, task=task, user=user)
+
+        # 🔄 Actualizar el comentario
+        comment.comment = request.data.get('comment', comment.comment)
+        comment.save()
+
+        # Serializar y devolver la respuesta
+        serializer = CommentsSerializer(comment)
+        return Response(serializer.data, status=status.HTTP_200_OK)
+
+    def delete(self, request, task=None, id=None):
+        user = request.user
+
+        # 🔍 Buscar el comentario y validar que le pertenece al usuario
+        comment = get_object_or_404(Comments, id=id, task=task, user=user)
+
+        # 🗑️ Eliminar el comentario
+        comment.delete()
+
+        return Response({"message": "Comentario eliminado correctamente."}, status=status.HTTP_204_NO_CONTENT)
