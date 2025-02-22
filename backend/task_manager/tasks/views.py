@@ -2,6 +2,8 @@ from django.utils import timezone
 from rest_framework.response import Response
 from rest_framework.generics import GenericAPIView
 from rest_framework import generics, permissions, status
+from rest_framework.generics import ListAPIView
+from rest_framework.filters import OrderingFilter
 from django.shortcuts import get_object_or_404
 
 
@@ -68,22 +70,32 @@ class GetTaskDetails(GenericAPIView):
         return Response({"task": serializer.data}, status=status.HTTP_200_OK)
 
 # Vista para obtener las tareas con pocos detalles
-class ListTasksActive(generics.ListAPIView):
+class ListTasksActive(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = GetTasksSerializer
 
+    filter_backends = (OrderingFilter,)
+    ordering_fields = ['name', 'created_at', 'progress', 'start_date', 'end_date']  # Los campos que se pueden ordenar
+    ordering = ['created_at']  # El valor predeterminado si no se pasa el parámetro 'ordering'
+
     def get_queryset(self):
-        # Obtener el usuario autenticado
         user = self.request.user
+        show_all = self.request.query_params.get('all', None)
+        tag_name = self.request.query_params.get('tag_name', None)
+        priority = self.request.query_params.get('priority', None)
 
-        # Obtener el parámetro "all" de la URL
-        show_all = self.request.query_params.get('all', 'false').lower()
+        queryset = Tasks.objects.filter(user=user)
 
-        # Obtener todas las tareas o solo las activas
-        if show_all == 'true':
-            return Tasks.objects.filter(user=user)
-        else:
-            return Tasks.objects.filter(user=user, state=True)
+        if show_all != 'true':
+            queryset = queryset.filter(state=True)  # Solo tareas activas
+
+        if priority == 'true':
+            queryset = queryset.filter(priority=True)  # Solo tareas prioritarias
+
+        if tag_name:
+            queryset = queryset.filter(tag__name=tag_name)
+
+        return queryset
 
     def get_serializer_context(self):
         # Pasar el contexto para indicar si se debe incluir el campo state

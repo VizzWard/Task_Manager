@@ -186,42 +186,26 @@ Response:
 
 ---
 
-### Get Active Tasks
+### Get Filtered Tasks
 
-**GET http://localhost:8000/task/get_tasks/**
+Filter by: 
+- `all=true`: Get history tasks [Extra field `state` return | true: active, false: inactive]
+- `tag_name`: Filter by tag name [If `tag_name` is null return all tasks | `tag_name=<tag_name>` return only tasks with the tag name]
+- `priority=true`: Filter by priority [If `priority=false` return all tasks | `priority=true` return only priority tasks]
 
-Request (Autorization header with Bearer token):
+Order by (add `-` for descending order):
+- `created_at`: Orber by created date (Default)
+- `name`: Order by name (Alphabetic)
+- `progress`: Order by progress (Numeric order 0-6)
+- `start_date`: Order by start date
+- `end_date`: Order by end date
 
-```json
-{}
-```
+Get active tasks (no paramns):
+**GET http://localhost:8000/task/get_tasks/** 
 
-Response:
+Example with params (only one ordering field):
 
-```json
-[
-    {
-        "id": 1,
-        "name": "test_task",
-        "progress": 0,
-        "priority": false,
-        "tag_name": null
-    },
-    {
-        "id": 2,
-        "name": "test_task",
-        "progress": 0,
-        "priority": false,
-        "tag_name": null
-    }
-]
-```
-
----
-
-### Get All Task
-
-**GET http://localhost:8000/task/get_tasks/?all=true**
+**GET http://localhost:8000/task/get_tasks/?all=true&tag_name=pruebas&priority=true&ordering=end_date**
 
 Request (Autorization header with Bearer token):
 

@@ -40,7 +40,8 @@ class GetTasksSerializer(serializers.ModelSerializer):
             'name',
             'progress',
             'priority',
-            'tag_name'
+            'tag_name',
+            'created_at',
         ]
 
     def __init__(self, *args, **kwargs):
