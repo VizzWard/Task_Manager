@@ -186,7 +186,7 @@ Response:
 
 ---
 
-### Get Filtered Tasks
+### Get Filtered/Ordering Tasks
 
 Filter by: 
 - `all=true`: Get history tasks [Extra field `state` return | true: active, false: inactive]
@@ -240,7 +240,7 @@ Response:
 
 ### Get Task by ID
 
-**GET http://localhost:8000/task/get_task/1/**
+**GET http://localhost:8000/task/get_task/1**
 
 Request (Autorization header with Bearer token):
 
