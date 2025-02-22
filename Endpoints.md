@@ -219,19 +219,21 @@ Response:
 [
     {
         "id": 1,
-        "name": "test_task",
-        "progress": 0,
-        "priority": false,
-        "tag_name": "pruebas",
-        "state": true
+        "name": "task_task",
+        "progress": 3,
+        "priority": true,
+        "tag_name": "tasks",
+        "created_at": "2025-02-21T03:27:15.078461Z",
+        "state": false
     },
     {
         "id": 2,
-        "name": "test_task_2",
-        "progress": 8,
+        "name": "test_task",
+        "progress": 0,
         "priority": false,
-        "tag_name": "update",
-        "state": false
+        "tag_name": null,
+        "created_at": "2025-02-21T03:27:15.081962Z",
+        "state": true
     }
 ]
 ```
