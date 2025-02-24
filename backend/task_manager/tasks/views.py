@@ -9,6 +9,7 @@ from django.shortcuts import get_object_or_404
 
 from .models import TagsUser, Tasks, Comments
 from .serializers import TagsUserSerializer, TasksSerializer, CommentsSerializer, GetTasksSerializer
+from .pagination import CustomTasksLimitOffsetPagination
 
 # Create your views here.
 class CreateTaskUser(generics.CreateAPIView):
@@ -73,6 +74,7 @@ class GetTaskDetails(GenericAPIView):
 class ListTasksActive(ListAPIView):
     permission_classes = (permissions.IsAuthenticated,)
     serializer_class = GetTasksSerializer
+    pagination_class = CustomTasksLimitOffsetPagination
 
     filter_backends = (OrderingFilter,)
     ordering_fields = ['name', 'created_at', 'progress', 'start_date', 'end_date']  # Los campos que se pueden ordenar
